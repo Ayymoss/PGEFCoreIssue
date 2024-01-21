@@ -2,12 +2,8 @@
 
 namespace PGEFCoreIssue;
 
-public class DataContext : DbContext
+public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
 {
-    public DataContext(DbContextOptions<DataContext> options) : base(options)
-    {
-    }
-
     public DbSet<EFTest> Test { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
