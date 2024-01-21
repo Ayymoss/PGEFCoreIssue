@@ -2,8 +2,12 @@
 
 namespace PGEFCoreIssue;
 
-public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
+public class DataContext : DbContext
 {
+    public DataContext(DbContextOptions<DataContext> options) : base(options)
+    {
+    }
+
     public DbSet<EFTest> Test { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -15,8 +19,7 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
 
             ent.Property(alias => alias.SearchableIPAddress)
                 .HasMaxLength(255)
-                .HasComputedColumnSql(
-                    @"((IPAddress & 255) || '.' || ((IPAddress >> 8) & 255)) || '.' || ((IPAddress >> 16) & 255) || '.' || ((IPAddress >> 24) & 255)",
+                .HasComputedColumnSql("CASE WHEN \"IPAddress\" IS NULL THEN 'NULL'::text ELSE (\"IPAddress\" & 255)::text || '.'::text || ((\"IPAddress\" >> 8) & 255)::text || '.'::text || ((\"IPAddress\" >> 16) & 255)::text || '.'::text || ((\"IPAddress\" >> 24) & 255)::text END",
                     stored: true);
             ent.HasIndex(alias => alias.SearchableIPAddress);
         });

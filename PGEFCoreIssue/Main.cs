@@ -3,10 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PGEFCoreIssue;
 
-public class Main(DataContext context)
+public class Main
 {
+    private readonly DataContext _context;
+
+    public Main(DataContext context)
+    {
+        _context = context;
+    }
+
     public async Task Run()
     {
-        await context.Database.MigrateAsync();
+        await _context.Database.MigrateAsync();
     }
 }

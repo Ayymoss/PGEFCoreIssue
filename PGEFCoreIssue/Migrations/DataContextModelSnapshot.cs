@@ -38,7 +38,7 @@ namespace PGEFCoreIssue.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
-                        .HasComputedColumnSql("((IPAddress & 255) || '.' || ((IPAddress >> 8) & 255)) || '.' || ((IPAddress >> 16) & 255) || '.' || ((IPAddress >> 24) & 255)", true);
+                        .HasComputedColumnSql("CASE WHEN \"IPAddress\" IS NULL THEN 'NULL'::text ELSE (\"IPAddress\" & 255)::text || '.'::text || ((\"IPAddress\" >> 8) & 255)::text || '.'::text || ((\"IPAddress\" >> 16) & 255)::text || '.'::text || ((\"IPAddress\" >> 24) & 255)::text END", true);
 
                     b.HasKey("Id");
 
